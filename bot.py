@@ -1,5 +1,6 @@
 import connection
 
+
 class IrcBot(object):
     """Default bot implementation. 
 
@@ -13,26 +14,31 @@ class IrcBot(object):
     """
 
     def __init__(self, host, port, user, realname, nick, log=None, debug=1):
+        self.host = host
+        self.port = port
         self.user = user
         self.realname = realname
         self.nick = nick
         self.log = log
         self.debug = debug
         self.quitting = False
-        self.connection = connection.IrcConnection(host, port, log)
+        self.init()
+
+    def init(self):
+        self.connection = connection.IrcConnection(self.host, self.port, self.log)
         if self.log and self.debug:
             print "Connection established."
-        self.handle_input()
         self.send_init()
+        return self.handle_input()
 
     def send_raw_line(self, line):
         self.connection.send_line(line)
 
     def send_chan_line(self, channel, line):
-        self.send_raw_line("PRIVMSG "+channel+": "+line)
+        self.send_raw_line("PRIVMSG "+channel.strip()+" :"+line)
 
     def send_priv_line(self, target, line):
-        self.send_raw_line("PRIVMSG "+target+": "+line)
+        self.send_raw_line("PRIVMSG "+target.strip()+" :"+line)
         # yes, I know it's the same
     
     def part_channel(self, channel, reason="No reason given."):
@@ -62,8 +68,12 @@ class IrcBot(object):
     
     def handle_input(self):
         lines = self.connection.receive_lines()
-        for line in lines:
-            self.handle_raw_line(line)
+        if lines != "":
+            for line in lines:
+                self.handle_raw_line(line)
+            return 0
+        else:
+            return 1
         
     def handle_raw_line(self, line):
         if self.log:
@@ -116,24 +126,33 @@ class IrcBot(object):
             self.end_of_motd()
 
     def handle_chan_msg(self, nick, host, channel, msg):
-        pass
+        channel = channel.strip()
+        if self.debug:
+            print("Got channel message: <"+nick+channel+"> "+msg)
 
     def handle_priv_msg(self, nick, host, msg):
-        pass
+        if self.debug:
+            print("Got private message: <"+nick+"@"+host+"> "+msg)
 
     def handle_self_mode(self, mode):
-        pass
+        if self.debug:
+            print("Set mode on self: "+mode)
     
     def handle_chan_mode(self, nick, host, channel, mode):
-        pass
+        channel = channel.strip()
+        if self.debug:
+            print("Set mode on channel "+channel+": "+mode)
     
     def end_of_motd(self):
-        pass
+        self.set_self_mode("+B")
 
     def debug_log(self, line):
         self.connection.debug_log(line)
     
     def update(self):
-        self.handle_input()
-        
-
+        err = self.handle_input()
+        while err and not quitting:
+            if self.log:
+                self.connection.error_log("Disconnected from server. Reconnecting.. ")
+            time.sleep(5)
+            err = self.init()
