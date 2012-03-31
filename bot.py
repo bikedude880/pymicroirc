@@ -108,6 +108,7 @@ class IrcBot(object):
                 tmp, channel = line.split(" PART ",1)
                 nick, host = tmp.split("!",1)
                 channel = "#" + channel.split("#",1)[1] #fix for missing part :'s in some ircds
+                self.handle_part(nick, host, channel)
             elif " MODE " in command:
                 #it's a mode change
                 origin, target = command.split(" MODE ",1)
