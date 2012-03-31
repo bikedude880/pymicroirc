@@ -17,7 +17,7 @@ class IrcConnection(object):
 
     def init_logs(self):
         if self.log:
-            if not os.path.exists(log_folder):
+            if not os.path.exists(self.log):
                 print "Log folder does not exist or is not accessible!"
                 raise Exception                    
                 

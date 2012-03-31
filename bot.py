@@ -38,7 +38,10 @@ class IrcBot(object):
     def part_channel(self, channel, reason="No reason given."):
         self.send_raw_line("PART "+channel+" :"+reason)
 
-    def set_mode(self, channel, flags):
+    def set_self_mode(self, flags):
+        self.send_raw_line("MODE "+self.nick+" :"+flags)
+
+    def set_chan_mode(self, channel, flags):
         self.send_raw_line("MODE "+channel+" :"+flags)
 
     def quit(self, reason="No reason given."):

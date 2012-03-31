@@ -2,11 +2,12 @@ import bot
 import time
 
 CHANNELS = ("#pyendor", )
-GITHUB = "<to be added.>"
+GITHUB = "http://github.com/RedMike/pymicroirc"
 
 class Bot(bot.IrcBot):
         
     def end_of_motd(self):
+        self.set_self_mode("+B")
         for chan in CHANNELS:
             self.join_channel(chan)
 
@@ -38,7 +39,7 @@ class Bot(bot.IrcBot):
             else:
                 self.quit()
         elif cmd.startswith("part") and auth:
-            self.part(chan)
+            self.part_channel(chan)
         elif cmd.startswith("docs"):
             lines = ( 
             "My github page is available at: "+GITHUB,
