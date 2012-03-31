@@ -83,7 +83,7 @@ class IrcBot(object):
                 tmp, target = command.split(" PRIVMSG ",1)
                 nick, host = tmp.split("!",1)
                 message = line[1:].split(":",1)[1]
-                if target != self.nick:
+                if self.nick not in target:
                     self.handle_chan_msg(nick, host, target, message)
                 else:
                     self.handle_priv_msg(nick, host, message)
