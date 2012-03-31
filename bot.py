@@ -97,6 +97,17 @@ class IrcBot(object):
                     self.handle_chan_msg(nick, host, target, message)
                 else:
                     self.handle_priv_msg(nick, host, message)
+            elif " JOIN " in command:
+                #it's a join notification
+                tmp, channel = command.split(" JOIN ",1)
+                nick, host = tmp.split("!",1)
+                channel = "#" + channel.split("#",1)[1] #fix for missing join :'s in some ircds
+                self.handle_join(nick, host, channel)
+            elif " PART " in command:
+                #it's a part notification
+                tmp, channel = command.split(" PART ",1)
+                nick, host = tmp.split("!",1)
+                channel = "#" + channel.split("#",1)[1] #fix for missing part :'s in some ircds
             elif " MODE " in command:
                 #it's a mode change
                 origin, target = command.split(" MODE ",1)
@@ -133,6 +144,14 @@ class IrcBot(object):
     def handle_priv_msg(self, nick, host, msg):
         if self.debug:
             print("Got private message: <"+nick+"@"+host+"> "+msg)
+
+    def handle_join(self, nick, host, channel):
+        if self.debug:
+            print(nick +" joined "+channel+".")
+    
+    def handle_part(self, nick, host, channel):
+        if self.debug:
+            print(nick +" has left "+channel+".")
 
     def handle_self_mode(self, mode):
         if self.debug:
