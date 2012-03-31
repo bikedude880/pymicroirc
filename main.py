@@ -43,7 +43,7 @@ class Bot(bot.IrcBot):
             self.part_channel(chan)
         elif cmd.startswith("docs"):
             line  = "My github page is available at: "+GITHUB
-            self.send_chan_line(chan, nick + ": "+line)
+            self.send_priv_line(nick, line)
     
     def get_auth(self, nick, host, chan):
         """Returns a level of authentication for the nick, depending on the nick,
