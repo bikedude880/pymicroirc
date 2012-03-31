@@ -2,7 +2,7 @@
 import bot
 import time
 
-CHANNELS = ("#pyendor", )
+CHANNELS = ("#bots", )
 GITHUB = "http://github.com/RedMike/pymicroirc"
 
 class Bot(bot.IrcBot):
@@ -54,7 +54,7 @@ class Bot(bot.IrcBot):
             return 0  # No admin capabilities, only standard permissions.
 
     
-b = Bot("irc.foonetic.net", 6667, "Bot", "Real Bot", "microphone", "logs")
+b = Bot("irc.foonetic.net", 6667, "Bot", "Real Bot", "Sample_Bot", "logs")
 
 while not b.quitting:
     b.update()
