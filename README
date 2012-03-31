@@ -1,0 +1,11 @@
+PyMicroIRC is a simple IRC bot library written in Python. It is small, flexible, and extensible.
+
+It doesn't include boilerplate code for user authentication, handling multiple channels, etc.
+The author is expected to provide overrides for the appropriate methods in order to provide that.
+It's not meant to be used for extremely complex projects, but it reduces effort in trying to simply
+get a client connected to a network and handling incoming lines.
+
+main.py includes a sample bot with simple functionality. Occasionally, code from that sample
+might be merged into the library itself, for ease of use afterwards.
+
+The project is maintained by Michael Red <mike@codingden.net>, at: http://codingden.net
