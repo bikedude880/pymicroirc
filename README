@@ -5,6 +5,8 @@ The author is expected to provide overrides for the appropriate methods in order
 It's not meant to be used for extremely complex projects, but it reduces effort in trying to simply
 get a client connected to a network and handling incoming lines.
 
+Make sure to create the log folder in the project root folder. (if that's where the code points to)
+
 main.py includes a sample bot with simple functionality. Occasionally, code from that sample
 might be merged into the library itself, for ease of use afterwards.
 
