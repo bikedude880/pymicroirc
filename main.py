@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import bot
 import time
 
@@ -9,6 +10,14 @@ class Bot(bot.IrcBot):
     def end_of_motd(self):
         self.set_self_mode("+B")
         for chan in CHANNELS:
+            self.join_channel(chan)
+
+    def handle_priv_msg(self, nick, host, msg):
+        if self.debug:
+            print "Got private message: <"+nick+"@"+host+ "> "+msg
+        auth = self.get_auth(nick, host, None)
+        if msg.startswith("join") and auth == 2:
+            chan = msg.split(" ",1)[1]
             self.join_channel(chan)
 
     def handle_chan_msg(self, nick, host, chan, msg):
@@ -41,11 +50,8 @@ class Bot(bot.IrcBot):
         elif cmd.startswith("part") and auth:
             self.part_channel(chan)
         elif cmd.startswith("docs"):
-            lines = ( 
-            "My github page is available at: "+GITHUB,
-            )
-            for line in lines:
-                self.send_chan_line(chan, nick + ": "+line)
+            line  = "My github page is available at: "+GITHUB
+            self.send_chan_line(chan, nick + ": "+line)
     
     def get_auth(self, nick, host, chan):
         """Returns a level of authentication for the nick, depending on the nick,
