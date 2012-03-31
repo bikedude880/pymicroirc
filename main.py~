@@ -1,0 +1,26 @@
+import bot
+import time
+
+CHANNELS = ("#pyendor", )
+
+class Bot(bot.IrcBot):
+        
+    def end_of_motd(self):
+        for chan in CHANNELS:
+            self.join_channel(chan)
+
+    def handle_chan_msg(self, nick, host, chan, msg):
+        if self.debug == 2:
+            
+            
+
+    def handle_self_mode(self, flag):
+        print "Set: "+flag
+
+    def handle_chan_mode(self, nick, host, chan, mode):
+        print "Set on channel "+chan+": "+mode+" by "+nick
+    
+b = Bot("irc.foonetic.net", 6667, "Bot", "Real Bot", "microphone", "logs")
+
+while not b.quit:
+    b.update()
