@@ -79,7 +79,7 @@ class IrcBot(object):
         if self.log:
             self.debug_log(line)
         if self.debug>2:
-            print line
+            print(line)
         if line.startswith("PING"):
             self.send_raw_line("PONG "+line.replace("PING ",""))
         elif line.startswith(":"):
@@ -101,7 +101,6 @@ class IrcBot(object):
                 #it's a join notification
                 tmp, channel = line.split(" JOIN ",1)
                 nick, host = tmp.split("!",1)
-                print tmp
                 channel = "#" + channel.split("#",1)[1] #fix for missing join :'s in some ircds
                 self.handle_join(nick, host, channel)
             elif " PART " in command:
