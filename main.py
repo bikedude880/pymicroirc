@@ -4,6 +4,7 @@ import time
 
 CHANNELS = ("#bots", )
 GITHUB = "http://github.com/RedMike/pymicroirc"
+OWNER = "your_nick_here"
 
 class Bot(bot.IrcBot):
         
@@ -48,7 +49,7 @@ class Bot(bot.IrcBot):
     def get_auth(self, nick, host, chan):
         """Returns a level of authentication for the nick, depending on the nick,
         the host, and the channel it's about. This allows per-channel auths."""
-        if nick == "mike" and "ssnet.ro" in host:  #for debugging, mostly.
+        if nick == OWNER:  #for debugging, mostly. This should be host-based.
             return 2  # Global authentication for author.
         else:
             return 0  # No admin capabilities, only standard permissions.
