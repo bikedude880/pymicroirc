@@ -8,21 +8,19 @@ GITHUB = "http://github.com/RedMike/pymicroirc"
 class Bot(bot.IrcBot):
         
     def end_of_motd(self):
-        self.set_self_mode("+B")
+        super(Bot,self).end_of_motd()
         for chan in CHANNELS:
             self.join_channel(chan)
 
     def handle_priv_msg(self, nick, host, msg):
-        if self.debug:
-            print "Got private message: <"+nick+"@"+host+ "> "+msg
+        super(Bot,self).handle_priv_msg(nick, host, msg)
         auth = self.get_auth(nick, host, None)
         if msg.startswith("join") and auth == 2:
             chan = msg.split(" ",1)[1]
             self.join_channel(chan)
 
     def handle_chan_msg(self, nick, host, chan, msg):
-        if self.debug:
-            print "Got channel message: "+chan+": <"+nick+"> "+msg
+        super(Bot,self).handle_chan_msg(nick, host, chan, msg)
         #first, test for some basic commands.
         if msg.startswith("."):
             #it's a command, let's pass the call down the line.
@@ -31,13 +29,7 @@ class Bot(bot.IrcBot):
             #it's not a command, it's just chatter.
             pass
 
-    def handle_self_mode(self, flag):
-        if self.debug:
-            print "Set: "+flag
-
-    def handle_chan_mode(self, nick, host, chan, mode):
-        if self.debug:
-            print "Set on channel "+chan+": "+mode+" by "+nick
+#  from here on are methods only for this subclass
 
     def handle_command(self, nick, host, chan, cmd):
         #we just got a bot command. 
