@@ -99,13 +99,14 @@ class IrcBot(object):
                     self.handle_priv_msg(nick, host, message)
             elif " JOIN " in command:
                 #it's a join notification
-                tmp, channel = command.split(" JOIN ",1)
+                tmp, channel = line.split(" JOIN ",1)
                 nick, host = tmp.split("!",1)
+                print tmp
                 channel = "#" + channel.split("#",1)[1] #fix for missing join :'s in some ircds
                 self.handle_join(nick, host, channel)
             elif " PART " in command:
                 #it's a part notification
-                tmp, channel = command.split(" PART ",1)
+                tmp, channel = line.split(" PART ",1)
                 nick, host = tmp.split("!",1)
                 channel = "#" + channel.split("#",1)[1] #fix for missing part :'s in some ircds
             elif " MODE " in command:
