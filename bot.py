@@ -100,13 +100,13 @@ class IrcBot(object):
             elif " JOIN " in command:
                 #it's a join notification
                 tmp, channel = line.split(" JOIN ",1)
-                nick, host = tmp.split("!",1)
+                nick, host = tmp[1:].split("!",1)
                 channel = "#" + channel.split("#",1)[1] #fix for missing join :'s in some ircds
                 self.handle_join(nick, host, channel)
             elif " PART " in command:
                 #it's a part notification
                 tmp, channel = line.split(" PART ",1)
-                nick, host = tmp.split("!",1)
+                nick, host = tmp[1:.split("!",1)
                 channel = "#" + channel.split("#",1)[1] #fix for missing part :'s in some ircds
                 self.handle_part(nick, host, channel)
             elif " MODE " in command:
