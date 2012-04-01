@@ -106,7 +106,7 @@ class IrcBot(object):
             elif " PART " in command:
                 #it's a part notification
                 tmp, channel = line.split(" PART ",1)
-                nick, host = tmp[1:.split("!",1)
+                nick, host = tmp[1:].split("!",1)
                 channel = "#" + channel.split("#",1)[1] #fix for missing part :'s in some ircds
                 self.handle_part(nick, host, channel)
             elif " MODE " in command:
