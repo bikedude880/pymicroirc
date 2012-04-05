@@ -73,9 +73,13 @@ class IrcBot(object):
         if self.buffer != "":
             if line[-1:] != '\n':
                 lines = self.buffer.split('\n')
-            for line in lines[:-1]:
+                self.buffer = lines[:-1]
+                lines = lines[:-1]
+            else:
+                lines = self.buffer.split('\n')
+                self.buffer = ""
+            for line in lines:
                 self.handle_raw_line(line)
-            self.buffer = lines[:-1]
             return 0
         else:
             return 1
