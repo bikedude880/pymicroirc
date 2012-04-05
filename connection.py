@@ -1,6 +1,7 @@
 import socket
 import datetime
 import os
+import sys
 
 class IrcConnection(object):
 
@@ -9,17 +10,18 @@ class IrcConnection(object):
         self.init_logs()
         self.host, self.port = host, port
         self.socket = None
+        self.buffer = ""
         self.init_connection()
         if not self.socket:
             if self.log:
                 self.error_log("Connection failed to initialise.")
-            raise Exception
+                sys.exit(1)
 
     def init_logs(self):
         if self.log:
             if not os.path.exists(self.log):
                 print "Log folder does not exist or is not accessible!"
-                raise Exception                    
+                sys.exit(1)
                 
     def init_connection(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -27,14 +29,21 @@ class IrcConnection(object):
         self.socket.setblocking(0)
 
     def send_line(self, line):
-        self.socket.send(line+"\r\n")
+        self.socket.sendall(line+"\r\n")
 
     def receive_lines(self):
         lines = []
+        if self.buffer != "":
+            lines += [ self.buffer ]
         try:
             while(1):
                 buffer = self.socket.recv(4096)
-                lines += buffer.replace("\r","").split("\n")
+                if buffer[-1:] == '\n':
+                    lines += buffer.replace("\r","").split("\n")
+                    self.buffer = ""
+                else:
+                    lines += buffer.replace("\r","").split("\n")[:-1]
+                    self.buffer = buffer.replace("\r","").split("\n")[-1:]
         except socket.error as e:
             pass #dammit, I do need to fix this, don't I? Also messages getting cut off.
         return lines
