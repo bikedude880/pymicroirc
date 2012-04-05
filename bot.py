@@ -22,7 +22,6 @@ class IrcBot(object):
         self.log = log
         self.debug = debug
         self.quitting = False
-        self.buffer = ""
         self.init()
 
     def init(self):
@@ -69,15 +68,7 @@ class IrcBot(object):
     
     def handle_input(self):
         lines = self.connection.receive_lines()
-        self.buffer += lines
-        if self.buffer != "":
-            if line[-1:] != '\n':
-                lines = self.buffer.split('\n')
-                self.buffer = lines[:-1]
-                lines = lines[:-1]
-            else:
-                lines = self.buffer.split('\n')
-                self.buffer = ""
+        if lines != "":
             for line in lines:
                 self.handle_raw_line(line)
             return 0
