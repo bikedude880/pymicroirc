@@ -34,7 +34,7 @@ class IrcConnection(object):
     def receive_lines(self):
         lines = []
         if self.buffer != "":
-            lines += [ self.buffer ]
+            lines = [ self.buffer ]
         try:
             while(1):
                 buffer = self.socket.recv(4096)
@@ -43,7 +43,7 @@ class IrcConnection(object):
                     self.buffer = ""
                 else:
                     lines += buffer.replace("\r","").split("\n")[:-1]
-                    self.buffer = buffer.replace("\r","").split("\n")[-1:]
+                    self.buffer = buffer.replace("\r","").split("\n")[-1:][0]
         except socket.error as e:
             pass #dammit, I do need to fix this, don't I? Also messages getting cut off.
         return lines
